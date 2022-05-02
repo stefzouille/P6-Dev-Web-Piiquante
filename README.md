@@ -6,4 +6,6 @@ cd frontend
 
 npm run start
 
-ouvri dans le navigateur localhost:4200/login
+ouvrir dans le navigateur http ://localhost:4200/login
+
+puis ouvrir le serveur dans le navigateur avec http ://localhost:3000
