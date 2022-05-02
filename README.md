@@ -8,4 +8,6 @@ npm run start
 
 ouvrir dans le navigateur http ://localhost:4200/login
 
-puis ouvrir le serveur dans le navigateur avec http ://localhost:3000
+puis ouvrir le serveur dans la console : nodemon server
+
+puis ouvrir dans le navigateur avec http ://localhost:3000
