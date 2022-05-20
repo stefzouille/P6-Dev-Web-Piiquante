@@ -12,11 +12,10 @@ const mongoose = require('mongoose');
 const mdpApi = process.env.PROJECT_API_KEY;
 
 const nameApi = process.env.NAME_API;
-lo
+
 
 const dataBase = `mongodb+srv://${nameApi}:${mdpApi}@cluster0.e9dod.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 
-// mongoose.connect('mongodb+srv://g@cluster0.e9dod.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
 mongoose.connect(dataBase,
   {
     useNewUrlParser: true,
