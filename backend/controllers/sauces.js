@@ -7,6 +7,7 @@ const fs = require('fs');
 // export d une fonction pour la creation d une sauce
 exports.creatSauce = (req, res, next) => {
   // extraire l objet json de la requete 
+  console.log(req.body);
   const sauceObject = JSON.parse(req.body.sauce);
   delete sauceObject._id;
   const sauce = new Sauce({
