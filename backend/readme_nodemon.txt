@@ -8,7 +8,11 @@ Pour ce faire, exécutez la commande suivante :
 
 Désormais, au lieu d'utiliser node server pour démarrer votre serveur, 
 
-vous pouvez utiliser nodemon server . 
+vous pouvez utiliser :
+
+
+ nodemon server . 
+
 
 Il surveillera les modifications de vos fichiers et redémarrera le serveur lorsqu'il aura besoin d'être mis à jour. 
 
