@@ -11,3 +11,5 @@ ouvrir dans le navigateur http ://localhost:4200/login
 puis ouvrir le serveur dans la console : nodemon server
 
 puis ouvrir dans le navigateur avec http ://localhost:3000
+
+utiliser l application postman pour les requettes au lieu du navigateur
