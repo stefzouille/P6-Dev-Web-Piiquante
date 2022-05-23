@@ -3,13 +3,11 @@
 const Sauce = require('../models/modelsSauce');
 
 const fs = require('fs');
-console.log(Sauce);
 
 // export d une fonction pour la creation d une sauce
 exports.creatSauce = (req, res, next) => {
   // extraire l objet json de la requete 
   const sauceObject = JSON.parse(req.body.sauce);
-  console.log(sauceObject);
   // delete sauceObject._id;
   const sauce = new Sauce({
     ...sauceObject,
@@ -17,17 +15,11 @@ exports.creatSauce = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
 
   });
-  console.log(sauce)
   sauce
     .save()
-    .then((sauce) => {
-      res.status(201).json({ sauce });
-    })
+    .then((sauce) => { res.status(201).json({ sauce }); })
     .catch((error) => {
-      console.log(error);
-      res.status(400).json({
-        error,
-      });
+      res.status(400).json({ error, });
     });
 };
 
