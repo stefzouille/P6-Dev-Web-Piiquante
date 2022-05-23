@@ -15,10 +15,7 @@ exports.creatSauce = (req, res, next) => {
     ...sauceObject,
     // generer l url de l image
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    // likes: 0,
-    // dislikes: 0,
-    // usersLiked: [],
-    // usersDisliked: []
+
   });
   console.log(sauce)
   sauce
@@ -27,7 +24,7 @@ exports.creatSauce = (req, res, next) => {
       res.status(201).json({ sauce });
     })
     .catch((error) => {
-      console.log('ici')
+      console.log(error);
       res.status(400).json({
         error,
       });
@@ -53,7 +50,7 @@ exports.deleteSauce = (req, res, next) => {
       // supprimer l image du serveur si elle existe et dans le dossier images
       const filename = sauce.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
-        modelsSauce.deleteOne({ _id: req.params.id })
+        Sauce.deleteOne({ _id: req.params.id })
           .then(() => res.status(200).json({ message: 'Objet supprimé !' }))
           .catch(error => res.status(400).json({ error }));
       });
@@ -74,3 +71,20 @@ exports.getAllSauces = (req, res, next) => {
     .then(sauce => res.status(200).json(sauce))
     .catch(error => res.status(400).json({ error }));
 }
+
+//Le like sur les sauces
+exports.likeSauce = (req, res, next) => {
+  Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {
+      // ajouter le userId a la liste des userLiked
+      sauce.usersLiked.push(req.body.userId);
+      // ajouter le like a la liste des likes
+      sauce.likes += 1;
+      // sauvegarder la sauce
+      sauce
+        .save()
+        .then(() => res.status(200).json({ message: 'Objet modifié !' }))
+        .catch(error => res.status(400).json({ error }));
+    })
+    .catch(error => res.status(404).json({ error }));
+};
