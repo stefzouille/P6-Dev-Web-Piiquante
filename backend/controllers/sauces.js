@@ -3,13 +3,14 @@
 const Sauce = require('../models/modelsSauce');
 
 const fs = require('fs');
+console.log(Sauce);
 
 // export d une fonction pour la creation d une sauce
 exports.creatSauce = (req, res, next) => {
   // extraire l objet json de la requete 
-  console.log(req.body);
   const sauceObject = JSON.parse(req.body.sauce);
-  delete sauceObject._id;
+  console.log(sauceObject);
+  // delete sauceObject._id;
   const sauce = new Sauce({
     ...sauceObject,
     // generer l url de l image
@@ -19,12 +20,19 @@ exports.creatSauce = (req, res, next) => {
     // usersLiked: [],
     // usersDisliked: []
   });
-  sauce.save()
-    .then(() => res.status(201).json({
-      message: 'Objet enregistré !'
-    }))
-    .catch(error => res.status(400).json({ error }));
-}
+  console.log(sauce)
+  sauce
+    .save()
+    .then((sauce) => {
+      res.status(201).json({ sauce });
+    })
+    .catch((error) => {
+      console.log('ici')
+      res.status(400).json({
+        error,
+      });
+    });
+};
 
 // modifier une sauce
 exports.modifySauce = (req, res, next) => {
@@ -33,14 +41,14 @@ exports.modifySauce = (req, res, next) => {
       ...JSON.parse(req.body.sauce),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-  modelsSauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+  Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'Objet modifié !' }))
     .catch(error => res.status(400).json({ error }));
 };
 
 // supprimer une sauce
 exports.deleteSauce = (req, res, next) => {
-  modelsSauce.findOne({ _id: req.params.id })
+  Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
       // supprimer l image du serveur si elle existe et dans le dossier images
       const filename = sauce.imageUrl.split('/images/')[1];
@@ -55,14 +63,14 @@ exports.deleteSauce = (req, res, next) => {
 
 // recuperer une seule sauce
 exports.getOneSauce = (req, res, next) => {
-  modelsSauce.findOne({ _id: req.params.id })
+  Sauce.findOne({ _id: req.params.id })
     .then(sauce => res.status(200).json(sauce))
     .catch(error => res.status(404).json({ error }));
 }
 
 // recup toute les sauces
 exports.getAllSauces = (req, res, next) => {
-  modelsSauce.find()
+  Sauce.find()
     .then(sauce => res.status(200).json(sauce))
     .catch(error => res.status(400).json({ error }));
 }

@@ -5,12 +5,13 @@ const router = express.Router();
 //import du controlleur sauce
 
 
-// pour uploader des fichiers avec le middleware multer
-const multer = require('../middleware/multer-config');
 
 const sauceCtrl = require('../controllers/sauces');
 
 const auth = require('../middleware/auth');
+
+// pour uploader des fichiers avec le middleware multer
+const multer = require('../middleware/multer-config');
 
 // la logique a l interieur de chaque route sera deporté dans le dossier controllers
 // import des fonctions du controlleur
