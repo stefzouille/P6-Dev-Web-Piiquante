@@ -6,9 +6,36 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
+var passwordValidator = require('password-validator');
+// securiser le mot de passe
+// on verifie que le mot de passe respecte les conditions
+// on verifie que le mot de passe est assez long
+// on verifie que le mot de passe contient des majuscules
+// on verifie que le mot de passe contient des minuscules
+// on verifie que le mot de passe contient des chiffres
+// on verifie que le mot de passe contient des caracteres speciaux
+const passwordSchema = new passwordValidator();
+passwordSchema
+  .is().min(8)                                    // Minimum length 8
+  .is().max(100)                                  // Maximum length 100
+  .has().uppercase()                              // Must have uppercase letters
+  .has().lowercase()                              // Must have lowercase letters
+  .has().digits()                                 // Must have digits
+  .has().not().spaces()                           // Should not have spaces
+  .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
+
+
+
 // creation de new user dans la base de donnée
 // a partir du formulaire de l inscription
 exports.signup = (req, res, next) => {
+  // verifier que le mot de passe respecte les conditions
+  const validation = passwordSchema.validate(req.body.password);
+  if (!validation) {
+    // si le mot de passe n est pas valide
+    // on renvoie un message d erreur
+    return res.status(400).json({ error: 'Le mot de passe doit respecter les conditions' });
+  }
   // creation du hash du mdp defini sur 10tours
   bcrypt.hash(req.body.password, 10)
     // on recupere le mdp crypté/ hash du mdp
@@ -34,6 +61,7 @@ exports.login = (req, res, next) => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
       }
+
       // on compare le mdp envoyé avec le user recuperer
       bcrypt.compare(req.body.password, user.password)
         .then(valid => {

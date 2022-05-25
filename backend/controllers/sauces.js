@@ -26,6 +26,15 @@ exports.creatSauce = (req, res, next) => {
 
 // modifier une sauce
 exports.modifySauce = (req, res, next) => {
+  Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {
+      if (req.body.userId && req.body.userId !== sauce.userId) {
+        throw 'Utilisateur non autorisé !';
+      }
+      // supprimer l image du serveur si elle existe et dans le dossier images
+      const filename = sauce.imageUrl.split('/images/')[1];
+      fs.unlink(`images/${filename}`, () => { })
+    });
   // si il y a une image dans la requete
   const sauceObject = req.file ?
     {
@@ -33,6 +42,7 @@ exports.modifySauce = (req, res, next) => {
       ...JSON.parse(req.body.sauce),
       // generer l url de l image
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+
     } : { ...req.body };
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'Objet modifié !' }))
@@ -43,6 +53,9 @@ exports.modifySauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
+      if (req.body.userId && req.body.userId !== sauce.userId) {
+        throw 'Utilisateur non autorisé !';
+      }
       // supprimer l image du serveur si elle existe et dans le dossier images
       const filename = sauce.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
@@ -71,6 +84,7 @@ exports.getAllSauces = (req, res, next) => {
 
 //Le like sur les sauces
 exports.likeSauce = (req, res, next) => {
+  console.log(req.body);
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
       // ajouter le userId a la liste des userLiked
@@ -81,15 +95,15 @@ exports.likeSauce = (req, res, next) => {
       sauce
         .save()
         .then(() => res.status(200).json({ message: 'Objet modifié !' }))
-        .catch(error => res.status(400).json({ error }));
+        .catch(error => {
+          console.log(error);
+          res.status(400).json({ error })
+        });
     })
-    .catch(error => res.status(404).json({ error }));
+    .catch(error => {
+      console.log(error);
+      res.status(404).json({ error })
+    });
 };
 
-// La liste des likes
-exports.getLikes = (req, res, next) => {
-  Sauce.findOne({ _id: req.params.id })
-  console.log(req.params.id)
-    .then(sauce => res.status(200).json(sauce))
-    .catch(error => res.status(404).json({ error }));
-}
+

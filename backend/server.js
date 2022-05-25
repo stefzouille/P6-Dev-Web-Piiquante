@@ -2,6 +2,7 @@
 // le rend plus constant et plus facile à déboguer
 
 const http = require('http');
+const https = require('https');
 const app = require('./app');
 
 // la fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne de caractères
