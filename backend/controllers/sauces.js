@@ -2,6 +2,7 @@
 
 const Sauce = require('../models/modelsSauce');
 
+// fs gestionnaire de fichier 
 const fs = require('fs');
 
 // export d une fonction pour la creation d une sauce
@@ -25,9 +26,12 @@ exports.creatSauce = (req, res, next) => {
 
 // modifier une sauce
 exports.modifySauce = (req, res, next) => {
+  // si il y a une image dans la requete
   const sauceObject = req.file ?
     {
+      // extraire l objet json de la requete
       ...JSON.parse(req.body.sauce),
+      // generer l url de l image
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
@@ -52,6 +56,7 @@ exports.deleteSauce = (req, res, next) => {
 
 // recuperer une seule sauce
 exports.getOneSauce = (req, res, next) => {
+  // recuperer l objet sauce
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => res.status(200).json(sauce))
     .catch(error => res.status(404).json({ error }));
@@ -80,3 +85,11 @@ exports.likeSauce = (req, res, next) => {
     })
     .catch(error => res.status(404).json({ error }));
 };
+
+// La liste des likes
+exports.getLikes = (req, res, next) => {
+  Sauce.findOne({ _id: req.params.id })
+  console.log(req.params.id)
+    .then(sauce => res.status(200).json(sauce))
+    .catch(error => res.status(404).json({ error }));
+}
