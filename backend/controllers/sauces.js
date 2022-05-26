@@ -87,23 +87,57 @@ exports.likeSauce = (req, res, next) => {
   console.log(req.body);
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
-      // ajouter le userId a la liste des userLiked
-      sauce.usersLiked.push(req.body.userId);
-      // ajouter le like a la liste des likes
-      sauce.likes += 1;
-      // sauvegarder la sauce
-      sauce
-        .save()
-        .then(() => res.status(200).json({ message: 'Objet modifié !' }))
-        .catch(error => {
-          console.log(error);
-          res.status(400).json({ error })
-        });
+      // switch pour le like -----------------------------------------------------
+      // nouvelles valeurs à modifier
+      const newValues = {
+        usersLiked: sauce.usersLiked,
+        usersDisliked: sauce.usersDisliked,
+        likes: 0,
+        dislikes: 0
+      }
+
+      switch (req.body.like) {
+        case 1: // si like
+          Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: req.body.like++ }, $push: { usersLiked: req.body.userId } })
+            .then((sauce) => res.status(200).json({ message: 'Like ajouté !' }))
+            .catch(error => res.status(400).json({ error }))
+          break;
+        case -1: // si dislike
+          Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: (req.body.like++) * -1 }, $push: { usersDisliked: req.body.userId } })
+            .then((sauce) => res.status(200).json({ message: 'Dislike ajouté !' }))
+            .catch(error => res.status(400).json({ error }))
+          break;
+        case 0: // si pas de like ou dislike
+          Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: (req.body.like++) * -1 }, $push: { usersDisliked: req.body.userId } })
+            .then(() => { res.status(201).json({ message: 'Ton dislike a été pris en compte!' }); })
+            .catch((error) => { res.status(400).json({ error: error }); });
+          break;
+        default:
+          console.error('not today : mauvaise requête');
+      }
+
+
+
+
+
+
+
+      // // sauvegarder la sauce
+      //   sauce
+      //     .save()
+      //     .then(() => res.status(200).json({ message: 'Objet modifié !' }))
+      //     .catch(error => {
+      //       console.log(error);
+      //       res.status(400).json({ error })
+      //     });
+      // })
+      // .catch(error => {
+      //   console.log(error);
+      //   res.status(404).json({ error })
+      // });
     })
-    .catch(error => {
-      console.log(error);
-      res.status(404).json({ error })
-    });
-};
+
+}
+
 
 

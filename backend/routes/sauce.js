@@ -30,7 +30,6 @@ router.get('/', auth, sauceCtrl.getAllSauces);
 //like & dislike
 router.post('/:id/like', auth, sauceCtrl.likeSauce);
 
-// // liste des likes
-// router.get('/', auth, sauceCtrl.getLikes);
+
 
 module.exports = router;

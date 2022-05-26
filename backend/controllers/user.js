@@ -34,7 +34,9 @@ exports.signup = (req, res, next) => {
   if (!validation) {
     // si le mot de passe n est pas valide
     // on renvoie un message d erreur
-    return res.status(400).json({ error: 'Le mot de passe doit respecter les conditions' });
+    console.log('mot de passe non sécurisé')
+
+    return res.status(400).json({ message: 'Le mot de passe doit respecter les conditions' });
   }
   // creation du hash du mdp defini sur 10tours
   bcrypt.hash(req.body.password, 10)
