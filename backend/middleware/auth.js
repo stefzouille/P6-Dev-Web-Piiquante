@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // middleware pour les routes qui nécessitent d'être authentifié
 const jwt = require('jsonwebtoken');
 
@@ -6,7 +8,7 @@ module.exports = (req, res, next) => {
     // recup le token du header Authorization -- split retourne en tableau le token et le type de token
     const token = req.headers.authorization.split(' ')[1];
     // decoder le token
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, `${process.env.SECRETKEY}`);
     // recuper le userId du token
     const userId = decodedToken.userId;
     // recup le userId de la requete

@@ -1,10 +1,11 @@
 // routes d hautentication pour le controleur du  formulaire de connexion
-
+require('dotenv').config()
 // pour le cryprtage de mot de passe
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
+
 
 var passwordValidator = require('password-validator');
 // securiser le mot de passe
@@ -76,7 +77,7 @@ exports.login = (req, res, next) => {
               { userId: user._id },
               // clé secrete simple pour dev uniquement
               // pour la production on utilise une clé secrete beaucoup plus longue et plus aleatoire
-              'RANDOM_TOKEN_SECRET',
+              `${process.env.SECRETKEY}`,
               { expiresIn: '24h' }
             )
           });
