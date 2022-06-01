@@ -84,17 +84,9 @@ exports.getAllSauces = (req, res, next) => {
 
 //Le like sur les sauces
 exports.likeSauce = (req, res, next) => {
-  console.log(req.body);
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
       // switch pour le like -----------------------------------------------------
-      // nouvelles valeurs à modifier
-      // const newValues = {
-      //   usersLiked: sauce.usersLiked,
-      //   usersDisliked: sauce.usersDisliked,
-      //   likes: 0,
-      //   dislikes: 0
-      // }
       switch (req.body.like) {
         case 1: // si like ajouter 1 au nombre de like
           Sauce.updateOne({ _id: req.params.id }, {
