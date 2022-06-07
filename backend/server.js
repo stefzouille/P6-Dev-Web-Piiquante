@@ -1,8 +1,10 @@
 // Ajouter la normalisation de port, la gestion d'erreur et du logging basique à votre serveur Node 
 // le rend plus constant et plus facile à déboguer
 
+require('dotenv').config();
+
 const http = require('http');
-const https = require('https');
+
 const app = require('./app');
 
 // la fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne de caractères
@@ -17,7 +19,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT);
 app.set('port', port);
 
 // la fonction errorHandler  recherche les différentes erreurs et les gère de manière appropriée
