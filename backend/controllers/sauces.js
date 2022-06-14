@@ -82,7 +82,7 @@ exports.getAllSauces = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 }
 
-//Le like sur les sauces
+//Le like/dislike sur les sauces
 exports.likeSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
