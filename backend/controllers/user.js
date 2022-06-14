@@ -35,7 +35,7 @@ exports.signup = (req, res, next) => {
   if (!validation) {
     // si le mot de passe n est pas valide
     // on renvoie un message d erreur
-    console.log('mot de passe non sécurisé')
+    // console.log('mot de passe non sécurisé')
     // alert('mot de passe non sécurisé')
 
     return res.status(400).json({ message: "Mot de passe non sécurisé !" })
